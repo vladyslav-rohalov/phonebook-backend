@@ -58,11 +58,13 @@ const verifyEmail = async (req, res) => {
 };
 
 const resendVerifyEmail = async (req, res) => {
+  console.log('first');
   const { email } = req.body;
   if (!email) {
     throw HttpError(400, 'missing required field email');
   }
-  const user = await User.findById({ email });
+  const user = await User.findOne({ email });
+  console.log(user);
   if (!user) {
     throw HttpError(404, 'User not found');
   }
@@ -72,7 +74,7 @@ const resendVerifyEmail = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: 'Verify email',
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/api/phonebook/auth/verify/${user.verificationToken}">Click verify email</a>`,
   };
   sendEmail(verifyEmail);
 
