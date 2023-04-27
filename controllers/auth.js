@@ -53,7 +53,7 @@ const verifyEmail = async (req, res) => {
   });
 
   res.json({
-    message: 'Email verify success',
+    message: 'The verification letter has been resent!',
   });
 };
 
