@@ -2,7 +2,12 @@ const express = require('express');
 const ctrl = require('../../controllers/contacts');
 const router = express.Router();
 const { schemas } = require('../../models/contact');
-const { isValidId, validateBody, authenticate } = require('../../midlewares');
+const {
+  isValidId,
+  validateBody,
+  authenticate,
+  upload,
+} = require('../../midlewares');
 
 router.get('/', authenticate, ctrl.getAll);
 
@@ -24,6 +29,13 @@ router.patch(
   isValidId,
   validateBody(schemas.updateFavoriteSchema),
   ctrl.updateStatusContact
+);
+
+router.patch(
+  '/:id/avatar',
+  authenticate,
+  upload.single('avatar'),
+  ctrl.updateAvatar
 );
 
 router.delete('/:id', authenticate, isValidId, ctrl.deleteById);

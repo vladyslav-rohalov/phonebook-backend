@@ -1,5 +1,11 @@
+const gravatar = require('gravatar');
+const path = require('path');
+const fs = require('fs/promises');
+const Jimp = require('jimp');
 const { HttpError, ctrlWrapper } = require('../helpers');
 const { Contact } = require('../models/contact');
+
+const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
@@ -35,14 +41,19 @@ const getById = async (req, res) => {
 
 const add = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.create({ ...req.body, owner });
+  const { phone } = req.body;
+  const contact = await Contact.findOne({ phone });
+  if (contact) {
+    throw HttpError(409, 'Phone in use');
+  }
+  const avatarURL = gravatar.url();
+  const result = await Contact.create({ ...req.body, avatarURL, owner });
   res.status(201).json(result);
 };
 
 const updateById = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-  console.log(result);
   if (!result) {
     throw HttpError(404, 'Not found');
   }
@@ -59,6 +70,22 @@ const updateStatusContact = async (req, res) => {
     throw HttpError(404, 'Not found');
   }
   res.json(result);
+};
+
+const updateAvatar = async (req, res) => {
+  const { id } = req.params;
+  const { path: tempUpload, originalname } = req.file;
+  const fileName = `${id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, fileName);
+  await fs.rename(tempUpload, resultUpload);
+  Jimp.read(resultUpload, (err, image) => {
+    if (err) throw err;
+    image.resize(250, 250).write(resultUpload);
+  });
+  const avatarURL = path.join('avatars', fileName);
+  await Contact.findByIdAndUpdate(id, { avatarURL });
+
+  res.json({ avatarURL });
 };
 
 const deleteById = async (req, res) => {
@@ -86,6 +113,7 @@ module.exports = {
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
   updateStatusContact: ctrlWrapper(updateStatusContact),
+  updateAvatar: ctrlWrapper(updateAvatar),
   deleteById: ctrlWrapper(deleteById),
   deleteAll: ctrlWrapper(deleteAll),
 };

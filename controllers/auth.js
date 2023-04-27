@@ -1,9 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const gravatar = require('gravatar');
-const path = require('path');
-const fs = require('fs/promises');
-const Jimp = require('jimp');
+
 const { nanoid } = require('nanoid');
 
 const { User } = require('../models/user');
@@ -11,8 +8,6 @@ const { User } = require('../models/user');
 const { HttpError, ctrlWrapper, sendEmail } = require('../helpers');
 
 const { SECRET_KEY, BASE_URL } = process.env;
-
-const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -23,19 +18,17 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const avatarURL = gravatar.url(email);
   const verificationToken = nanoid();
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
-    avatarURL,
     verificationToken,
   });
   const verifyEmail = {
     to: email,
     subject: 'Verify email',
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/api/phonebook/auth/verify/${verificationToken}">Click verify email</a>`,
   };
   sendEmail(verifyEmail);
 
@@ -49,7 +42,6 @@ const register = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
-  console.log(req.params);
   const user = await User.findOne({ verificationToken });
 
   if (!user) {
@@ -71,7 +63,6 @@ const resendVerifyEmail = async (req, res) => {
     throw HttpError(400, 'missing required field email');
   }
   const user = await User.findById({ email });
-  console.log(user);
   if (!user) {
     throw HttpError(404, 'User not found');
   }
@@ -122,8 +113,8 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email, subscription, avatarURL } = req.user;
-  res.json({ email, subscription, avatarURL });
+  const { email, subscription } = req.user;
+  res.json({ email, subscription });
 };
 
 const logout = async (req, res) => {
@@ -156,31 +147,12 @@ const updateSubscription = async (req, res) => {
   });
 };
 
-const updateAvatar = async (req, res) => {
-  const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const fileName = `${_id}_${originalname}`;
-  const resultUpload = path.join(avatarsDir, fileName);
-  await fs.rename(tempUpload, resultUpload);
-  Jimp.read(resultUpload, (err, image) => {
-    if (err) throw err;
-    image
-      .resize(250, 250) // resize
-      .write(resultUpload); // save
-  });
-  const avatarURL = path.join('avatars', fileName);
-  await User.findByIdAndUpdate(_id, { avatarURL });
-
-  res.json({ avatarURL });
-};
-
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateSubscription),
-  updateAvatar: ctrlWrapper(updateAvatar),
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
 };
