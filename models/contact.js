@@ -27,7 +27,6 @@ const contactSchema = new Schema(
     },
     avatarURL: {
       type: String,
-      required: true,
     },
     favorite: {
       type: Boolean,

@@ -9,12 +9,14 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.325.0",
+    "@faker-js/faker": "^7.6.0",
+    "aws-sdk": "^2.1370.0",
     "bcrypt": "^5.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.0.3",
     "express": "4.17.1",
-    "gravatar": "^1.8.2",
     "jimp": "^0.22.7",
     "joi": "^17.9.1",
     "jsonwebtoken": "^9.0.0",
@@ -22,7 +24,8 @@
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
     "nanoid": "^3.3.6",
-    "nodemailer": "^6.9.1"
+    "nodemailer": "^6.9.1",
+    "rndm": "^1.2.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",

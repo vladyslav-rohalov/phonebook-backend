@@ -13,7 +13,13 @@ router.get('/', authenticate, ctrl.getAll);
 
 router.get('/:id', authenticate, isValidId, ctrl.getById);
 
-router.post('/', authenticate, validateBody(schemas.addSchema), ctrl.add);
+router.post(
+  '/',
+  authenticate,
+  upload.single('avatar'),
+  // validateBody(schemas.addSchema),
+  ctrl.add
+);
 
 router.put(
   '/:id',

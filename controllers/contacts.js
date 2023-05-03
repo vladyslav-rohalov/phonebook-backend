@@ -1,8 +1,8 @@
-const gravatar = require('gravatar');
+const { faker } = require('@faker-js/faker');
 const path = require('path');
 const fs = require('fs/promises');
 const Jimp = require('jimp');
-const { HttpError, ctrlWrapper } = require('../helpers');
+const { HttpError, ctrlWrapper, s3UploadV2 } = require('../helpers');
 const { Contact } = require('../models/contact');
 
 const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
@@ -46,30 +46,21 @@ const add = async (req, res) => {
   if (contact) {
     throw HttpError(409, 'Phone in use');
   }
-  const avatarURL = gravatar.url();
-  const result = await Contact.create({ ...req.body, avatarURL, owner });
-  res.status(201).json(result);
-};
+  const newContact = await Contact.create({ ...req.body, owner });
+  let result = null;
 
-const updateById = async (req, res) => {
-  const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-  if (!result) {
-    throw HttpError(404, 'Not found');
+  if (req.file) {
+    const file = req.file;
+    const avatarURL = await s3UploadV2(file);
+    console.log(avatarURL);
+    result = await Contact.findByIdAndUpdate(newContact._id, {
+      avatarURL: avatarURL.Location,
+    });
+  } else {
+    const avatarURL = faker.image.avatar();
+    result = await Contact.findByIdAndUpdate(interimResult._id, { avatarURL });
   }
   res.status(201).json(result);
-};
-
-const updateStatusContact = async (req, res) => {
-  if (Object.keys(req.body).length === 0) {
-    throw HttpError(400, 'missing field favorite');
-  }
-  const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-  if (!result) {
-    throw HttpError(404, 'Not found');
-  }
-  res.json(result);
 };
 
 const updateAvatar = async (req, res) => {
@@ -86,6 +77,28 @@ const updateAvatar = async (req, res) => {
   await Contact.findByIdAndUpdate(id, { avatarURL });
 
   res.json({ avatarURL });
+};
+
+const updateById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  console.log(req.body);
+  if (!result) {
+    throw HttpError(404, 'Not found');
+  }
+  res.status(201).json(result);
+};
+
+const updateStatusContact = async (req, res) => {
+  if (Object.keys(req.body).length === 0) {
+    throw HttpError(400, 'missing field favorite');
+  }
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, 'Not found');
+  }
+  res.json(result);
 };
 
 const deleteById = async (req, res) => {
