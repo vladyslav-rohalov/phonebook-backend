@@ -17,14 +17,15 @@ router.post(
   '/',
   authenticate,
   upload.single('avatar'),
-  // validateBody(schemas.addSchema),
+  validateBody(schemas.addSchema),
   ctrl.add
 );
 
-router.put(
+router.patch(
   '/:id',
   authenticate,
   isValidId,
+  upload.single('avatar'),
   validateBody(schemas.addSchema),
   ctrl.updateById
 );

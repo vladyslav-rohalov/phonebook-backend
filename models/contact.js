@@ -7,6 +7,7 @@ const addSchema = Joi.object({
   email: Joi.string(),
   phone: Joi.string(),
   favorite: Joi.boolean(),
+  avatar: Joi.string(),
 });
 
 const updateFavoriteSchema = Joi.object({
