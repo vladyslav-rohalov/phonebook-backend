@@ -37,15 +37,6 @@ router.patch(
   ctrl.updateStatusContact
 );
 
-router.patch(
-  '/:id/avatar',
-  authenticate,
-  upload.single('avatar'),
-  ctrl.updateAvatar
-);
-
 router.delete('/:id', authenticate, isValidId, ctrl.deleteById);
-
-router.delete('/', authenticate, ctrl.deleteAll);
 
 module.exports = router;

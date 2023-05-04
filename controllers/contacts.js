@@ -1,11 +1,7 @@
 const { faker } = require('@faker-js/faker');
-const path = require('path');
-const fs = require('fs/promises');
-const Jimp = require('jimp');
-const { HttpError, ctrlWrapper, s3UploadV2 } = require('../helpers');
+const { HttpError, ctrlWrapper } = require('../helpers');
+const { s3UploadV2, s3DeleteV2 } = require('../helpers/s3service');
 const { Contact } = require('../models/contact');
-
-const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
@@ -52,31 +48,14 @@ const add = async (req, res) => {
   if (req.file) {
     const file = req.file;
     const avatarURL = await s3UploadV2(file);
-    console.log(avatarURL);
     result = await Contact.findByIdAndUpdate(newContact._id, {
       avatarURL: avatarURL.Location,
     });
   } else {
     const avatarURL = faker.image.avatar();
-    result = await Contact.findByIdAndUpdate(interimResult._id, { avatarURL });
+    result = await Contact.findByIdAndUpdate(newContact._id, { avatarURL });
   }
   res.status(201).json(result);
-};
-
-const updateAvatar = async (req, res) => {
-  const { id } = req.params;
-  const { path: tempUpload, originalname } = req.file;
-  const fileName = `${id}_${originalname}`;
-  const resultUpload = path.join(avatarsDir, fileName);
-  await fs.rename(tempUpload, resultUpload);
-  Jimp.read(resultUpload, (err, image) => {
-    if (err) throw err;
-    image.resize(250, 250).write(resultUpload);
-  });
-  const avatarURL = path.join('avatars', fileName);
-  await Contact.findByIdAndUpdate(id, { avatarURL });
-
-  res.json({ avatarURL });
 };
 
 const updateById = async (req, res) => {
@@ -103,21 +82,17 @@ const updateStatusContact = async (req, res) => {
 
 const deleteById = async (req, res) => {
   const { id } = req.params;
+  const contact = await Contact.findById(id);
+  const avatarURL = contact.avatarURL;
+  if (avatarURL.includes('https://phonebook-storage')) {
+    const fileName = avatarURL.substring(64);
+    s3DeleteV2(fileName);
+  }
   const result = await Contact.findByIdAndRemove(id);
   if (!result) {
     throw HttpError(404, 'Not found');
   }
   res.json({ message: 'Delete success' });
-};
-
-const deleteAll = async (req, res) => {
-  const result = await Contact.deleteMany();
-  if (!result) {
-    throw HttpError(404, 'Not found');
-  }
-  res.json({
-    message: `${result.deletedCount} was deleted, now DB - contacts is empty`,
-  });
 };
 
 module.exports = {
@@ -126,7 +101,5 @@ module.exports = {
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
   updateStatusContact: ctrlWrapper(updateStatusContact),
-  updateAvatar: ctrlWrapper(updateAvatar),
   deleteById: ctrlWrapper(deleteById),
-  deleteAll: ctrlWrapper(deleteAll),
 };

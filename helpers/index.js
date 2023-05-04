@@ -4,7 +4,7 @@ const handleMogooseError = require('./handleMogooseError');
 const sendEmail = require('./sendEmail');
 const handleMulterError = require('./handleMulterError');
 const s3UploadV2 = require('./s3service');
-// const s3DeleteV2 = require('./s3service');
+const s3DeleteV2 = require('./s3service');
 
 module.exports = {
   HttpError,
@@ -13,5 +13,5 @@ module.exports = {
   sendEmail,
   handleMulterError,
   s3UploadV2,
-  // s3DeleteV2,
+  s3DeleteV2,
 };
