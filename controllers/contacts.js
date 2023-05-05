@@ -47,18 +47,14 @@ const add = async (req, res) => {
     throw HttpError(409, 'Phone in use');
   }
   const newContact = await Contact.create({ ...req.body, owner });
-  let result = null;
-
+  let avatarURL = '';
   if (req.file) {
     const file = req.file;
-    const avatarURL = await s3UploadV2(file);
-    result = await Contact.findByIdAndUpdate(newContact._id, {
-      avatarURL: avatarURL.Location,
-    });
+    avatarURL = (await s3UploadV2(file)).Location;
   } else {
-    const avatarURL = faker.image.avatar();
-    result = await Contact.findByIdAndUpdate(newContact._id, { avatarURL });
+    avatarURL = faker.image.avatar();
   }
+  const result = await Contact.findByIdAndUpdate(newContact._id, { avatarURL });
   res.status(201).json(result);
 };
 
@@ -103,7 +99,10 @@ const deleteById = async (req, res) => {
   const { id } = req.params;
   const contact = await Contact.findById(id);
   const avatarURL = contact.avatarURL;
-  if (avatarURL.includes('https://phonebook-storage')) {
+  if (
+    avatarURL !== 'undefined' &&
+    avatarURL.includes('https://phonebook-storage')
+  ) {
     const fileName = avatarURL.substring(64);
     s3DeleteV2(fileName);
   }

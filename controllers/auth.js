@@ -6,7 +6,7 @@ const { User } = require('../models/user');
 
 const { HttpError, ctrlWrapper, sendEmail } = require('../helpers');
 
-const { SECRET_KEY, BASE_URL, FRONTEND_URL } = process.env;
+const { SECRET_KEY, BASE_URL } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -29,7 +29,7 @@ const register = async (req, res) => {
     subject: 'Verify email',
     html: `<a target="_blank" href="${BASE_URL}/api/phonebook/auth/verify/${verificationToken}">Click verify email</a>`,
   };
-  // sendEmail(verifyEmail);
+  sendEmail(verifyEmail);
 
   res.status(201).json({
     user: {
@@ -73,7 +73,7 @@ const resendVerifyEmail = async (req, res) => {
     subject: 'Verify email',
     html: `<a target="_blank" href="${BASE_URL}/api/phonebook/auth/verify/${user.verificationToken}">Click verify email</a>`,
   };
-  // sendEmail(verifyEmail);
+  sendEmail(verifyEmail);
 
   res.json({
     message: `The confirmation email was resent to ${email}`,
