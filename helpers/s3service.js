@@ -22,4 +22,3 @@ exports.s3DeleteV2 = async fileName => {
   };
   return s3.deleteObject(param).promise();
 };
-// module.exports = { s3UploadV2, s3DeleteV2 };
