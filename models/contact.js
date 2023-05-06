@@ -4,8 +4,8 @@ const Joi = require('joi');
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string(),
-  phone: Joi.string(),
+  email: Joi.string().allow('').optional(),
+  phone: Joi.string().required(),
   favorite: Joi.boolean(),
   avatar: Joi.string(),
 });
@@ -25,6 +25,7 @@ const contactSchema = new Schema(
     },
     phone: {
       type: String,
+      required: [true, 'Set phone for contact'],
     },
     avatarURL: {
       type: String,
