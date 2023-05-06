@@ -47,14 +47,6 @@ const add = async (req, res) => {
 
 const updateById = async (req, res) => {
   const { id } = req.params;
-  const { _id: owner } = req.user;
-  const { phone } = req.body;
-
-  const isTwin = await Contact.findOne({ phone, owner });
-
-  if (isTwin) {
-    throw HttpError(409, 'Phone in use');
-  }
 
   const contact = await Contact.findById(id);
 
