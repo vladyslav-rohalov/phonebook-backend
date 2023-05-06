@@ -27,7 +27,7 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: 'Verify email',
-    html: `<a target="_blank" href="${BASE_URL}/api/phonebook/auth/verify/${verificationToken}">Click verify email</a>`,
+    html: `<p>Verification code: ${verificationToken} </p>`,
   };
   sendEmail(verifyEmail);
 
@@ -41,7 +41,9 @@ const register = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.body;
-  const user = await User.findOne({ verificationToken });
+  const tokenTrim = verificationToken.trim();
+  verificationToken.trim();
+  const user = await User.findOne({ verificationToken: tokenTrim });
 
   if (!user) {
     throw HttpError(404, 'Not found');
@@ -71,7 +73,7 @@ const resendVerifyEmail = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: 'Verify email',
-    html: `<a target="_blank" href="${BASE_URL}/api/phonebook/auth/verify/${user.verificationToken}">Click verify email</a>`,
+    html: `<p>Verification code: ${verificationToken} </p>`,
   };
   sendEmail(verifyEmail);
 

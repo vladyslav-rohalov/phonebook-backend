@@ -28,7 +28,8 @@ const getById = async (req, res) => {
 const add = async (req, res) => {
   const { _id: owner } = req.user;
   const { phone } = req.body;
-  const contact = await Contact.findOne({ phone });
+  const contact = await Contact.findOne({ phone, owner });
+
   if (contact) {
     throw HttpError(409, 'Phone in use');
   }
