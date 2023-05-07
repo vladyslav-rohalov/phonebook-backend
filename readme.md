@@ -45,7 +45,7 @@ application. <a href="https://vladyslav-rohalov.github.io/phonebook-frontend/">P
 </ul>
 
 <h3>Description</h3>
-<p>In writing the backend we used the MVC model.</p>
+<p>In writing the backend I used the MVC model.</p>
  <ul>
         <li>For contacts and users we created a model that consists of schemas.</li>
         <li>For the processing of all methods for contacts and users there are controllers.</li>
@@ -57,6 +57,14 @@ application. <a href="https://vladyslav-rohalov.github.io/phonebook-frontend/">P
         <li>Validate ID - checks if there is such an ID.</li>
         <li>Upload, using the package Multer uploads image files, the number of images - 1, the maximum size - 5MB</li>
         <li>Validation of the request body - checking for scheme consistency</li>
+ </ul>
+<p>Helpers</p>
+ <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
  </ul>
 
 
