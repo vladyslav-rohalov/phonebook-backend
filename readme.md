@@ -45,29 +45,54 @@ application. <a href="https://vladyslav-rohalov.github.io/phonebook-frontend/">P
 </ul>
 
 <h3>Description</h3>
+<p>In writing the backend we used the MVC model.</p>
+ <ul>
+        <li>For contacts and users we created a model that consists of schemas.</li>
+        <li>For the processing of all methods for contacts and users there are controllers.</li>
+        <li>For the processing of requests created routes, also for contacts and users.</li>
+ </ul>
+<p>Middlewares</p>
+ <ul>
+        <li>Authenticate - checks the user's bearer token. </li>
+        <li>Validate ID - checks if there is such an ID.</li>
+        <li>Upload, using the package Multer uploads image files, the number of images - 1, the maximum size - 5MB</li>
+        <li>Validation of the request body - checking for scheme consistency</li>
+ </ul>
+
+
 
 <h4>Authentication</h4>
    <ul>
-        <li>Registration</li>
-        <li>Log In</li>
-        <li>Log Out</li>
-        <li>Send verification token</li>
-        <li>Resend verification token</li>
-        <li>Get current User</li>
+        <li>Registration, method: post</li>
+        <li>Log In, method: post</li>
+        <li>Log Out, method: post</li>
+        <li>Send verification token, method: post</li>
+        <li>Resend verification token, method: post</li>
+        <li>Get current User, method: get</li>
    </ul>
 
 <h4>Contacts</h4>
    <ul>
-        <li>Get all contacts</li>
-        <li>Get contact by ID</li>
-        <li>Add a new contact</li>
-        <li>Update an existing contact</li>
-        <li>Update a contact's status (Favorites)</li>
-        <li>Delete contact</li>
+        <li>Get all contacts, method: get</li>
+        <li>Get contact by ID, method: get</li>
+        <li>Add a new contact, method: post</li>
+        <li>Update an existing contact, method: patch</li>
+        <li>Update a contact's status (Favorites), method: patch</li>
+        <li>Delete contact, method: delete</li>
    </ul>   
 
+<h4>Error handling </h4>
+   <ul>
+        <li>400: Bad Request</li>
+        <li>401: Unauthorized</li>
+        <li>402: Forbidden</li>
+        <li>404: Not found</li>
+        <li>409: Conflict</li>
+   </ul>  
 
-
+  
+  
+  
 
   
  
