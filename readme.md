@@ -73,7 +73,7 @@ application. <a href="https://vladyslav-rohalov.github.io/phonebook-frontend/">P
 
 
 
-<h4>Authentication</h4>
+<h4>Authentication controllers</h4>
    <ul>
         <li>Registration, method: post</li>
         <li>Log In, method: post</li>
@@ -83,7 +83,7 @@ application. <a href="https://vladyslav-rohalov.github.io/phonebook-frontend/">P
         <li>Get current User, method: get</li>
    </ul>
 
-<h4>Contacts</h4>
+<h4>Contacts controllers</h4>
    <ul>
         <li>Get all contacts, method: get</li>
         <li>Get contact by ID, method: get</li>
