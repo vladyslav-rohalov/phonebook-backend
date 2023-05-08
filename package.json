@@ -9,7 +9,6 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.325.0",
     "@faker-js/faker": "^7.6.0",
     "aws-sdk": "^2.1370.0",
     "bcrypt": "^5.1.0",
