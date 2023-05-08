@@ -19,7 +19,7 @@ application. <a href="https://vladyslav-rohalov.github.io/phonebook-frontend/">P
         <span><a href="https://mongoosejs.com/" target="_blank" rel="noreferrer">Mongoosejs</a>, to work with the database on the server. </span>
     </li>
     <li>
-        <span><a href="https://aws.amazon.com/ru/ec2/" target="_blank" rel="noreferrer">AWS EC2</a>, used to create a server. </span>
+        <span><a href="https://aws.amazon.com/ru/ec2/" target="_blank" rel="noreferrer">AWS EC2</a>, used to deploy the backend. </span>
     </li>
     <li>
         <span><a href="https://www.docker.com/" target="_blank" rel="noreferrer">Docker</a>, was used to create a container. </span>
@@ -42,6 +42,10 @@ application. <a href="https://vladyslav-rohalov.github.io/phonebook-frontend/">P
     <li>
         <span><a href="https://www.npmjs.com/package/jsonwebtoken" target="_blank" rel="noreferrer">Jsonwebtoken</a>, this package is used to create tokens.         </span>
     </li>
+     <li>
+        <span><a href=" https://nodemailer.com/" target="_blank" rel="noreferrer">Nodemailer</a>, This package was used to send letters to email.</span>
+    </li>
+   
 </ul>
 
 <h3>Description</h3>
@@ -60,11 +64,11 @@ application. <a href="https://vladyslav-rohalov.github.io/phonebook-frontend/">P
  </ul>
 <p>Helpers</p>
  <ul>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
+        <li>Controller wrapper - reused for all controllers.</li>
+        <li>Mongoose error handler - used to change the error code.</li>
+        <li>HTTP ERROR - used to handle client errors.</li>
+        <li>S3 service - used to work with AWS</li>
+        <li>Send mail - used to send a verification code to the mail when registering.</li>
  </ul>
 
 
