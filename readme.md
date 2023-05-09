@@ -1,4 +1,4 @@
-<h1>Phonebook APP</h1>
+<h1>Phonebook APP.</h1>
 <h2>Backend</h2>
 <h2> <a href="https://github.com/vladyslav-rohalov/phonebook-frontend/">Frontend</a></h2>
 <p>This repository is the backend part of my project and is a simple phonebook web
