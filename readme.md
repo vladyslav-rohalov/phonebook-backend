@@ -4,6 +4,7 @@
 <p>This repository is the backend part of my project and is a simple phonebook web
 application. <a href="https://vladyslav-rohalov.github.io/phonebook-frontend/">Phonebook</a>
 </p>
+<p>Also the backend is posted here https://vladyslav-rohalov-phonebook-backend.onrender.com</p>
 <h3>Languages and Tools</h3>
 <ul>
     <li>
